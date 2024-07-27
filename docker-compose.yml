@@ -1,0 +1,35 @@
+version: '3'
+services:
+  db:
+    image: postgres:13
+    container_name: database_ilumeo
+    ports:
+      - '5432:5432'
+    volumes:
+      - db_data:/var/lib/postgresql/data
+      # - ./docker/scripts/init.sql:/docker-entrypoint-initdb.d/init.sql:ro
+      - /etc/localtime:/etc/localtime:ro
+      - /etc/timezone:/etc/timezone:ro
+    environment:
+      POSTGRES_DB: lettiere
+      POSTGRES_USER: root
+      POSTGRES_PASSWORD: 12345678
+    restart: unless-stopped
+    networks:
+      - ilumeoNet
+
+  adminer:
+    image: adminer
+    container_name: adminer_ilumeo
+    ports:
+      - '8080:8080'
+    restart: unless-stopped
+    networks:
+      - ilumeoNet
+
+networks:
+  ilumeoNet:
+    driver: bridge
+
+volumes:
+  db_data:
